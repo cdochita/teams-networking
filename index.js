@@ -7,19 +7,17 @@ function getTeamHTML(team) {
             <a href="${team.url}">open</a>
           </td>
           <td>x e</td>
-        </tr>
-    `;
+        </tr>`;
 }
 
 function dispalyTeams(teams) {
   //transforma in HTML
-  var teamsHTML = "";
-  teams.forEach(function (team) {
-    console.info(team);
-    teamsHTML += getTeamHTML(team);
-  });
+
+  var teamsHTML = teams.map(getTeamHTML);
+  console.info("teamsHTML", teamsHTML);
+
   //Afiseaza
-  document.querySelector("table tbody").innerHTML = teamsHTML;
+  document.querySelector("table tbody").innerHTML = teamsHTML.join("");
 }
 
 function loadTeams() {
