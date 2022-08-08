@@ -18,7 +18,10 @@ function dispalyTeams(teams) {
   // console.info("teamsHTML", teamsHTML);
 
   //Afiseaza
-  document.querySelector("table tbody").innerHTML = teamsHTML.join("");
+  $("table tbody").innerHTML = teamsHTML.join("");
+}
+function $(selector) {
+  return document.querySelector(selector);
 }
 
 function loadTeams() {
@@ -33,10 +36,10 @@ function loadTeams() {
     });
 }
 function submitForm(e) {
-  var promotion = document.querySelector("[name=promotion]").value;
-  var members = document.querySelector("[name=members]").value;
-  var name = document.querySelector("[name=name]").value;
-  var url = document.querySelector("[name=url]").value;
+  var promotion = $("[name=promotion]").value;
+  var members = $("[name=members]").value;
+  var name = $("[name=name]").value;
+  var url = $("[name=url]").value;
   var team = {
     promotion: promotion,
     members: members,
