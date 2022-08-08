@@ -1,4 +1,3 @@
-var a = "";
 function getTeamHTML(team) {
   return `<tr>
           <td>${team.promotion}</td>
@@ -14,7 +13,7 @@ function getTeamHTML(team) {
 function dispalyTeams(teams) {
   //transforma in HTML
 
-  var teamsHTML = teams.map(getTeamHTML);
+  const teamsHTML = teams.map(getTeamHTML);
   // console.info("teamsHTML", teamsHTML);
 
   //Afiseaza
@@ -36,11 +35,11 @@ function loadTeams() {
     });
 }
 function submitForm(e) {
-  var promotion = $("[name=promotion]").value;
-  var members = $("[name=members]").value;
-  var name = $("[name=name]").value;
-  var url = $("[name=url]").value;
-  var team = {
+  const promotion = $("[name=promotion]").value;
+  const members = $("[name=members]").value;
+  const name = $("[name=name]").value;
+  const url = $("[name=url]").value;
+  const team = {
     promotion: promotion,
     members: members,
     name: name,
@@ -52,7 +51,7 @@ function submitForm(e) {
   e.preventDefault();
 }
 function initEvents() {
-  var form = document.getElementById("editForm");
+  const form = document.getElementById("editForm");
   console.info("form", form);
   form.addEventListener("submit", submitForm);
 }
