@@ -6,7 +6,7 @@ function getTeamHTML(team) {
           <td>
             <a href="${team.url}">open</a>
           </td>
-          <td>x e</td>
+          <td><button type="button" id = 'delete'> ❌</button></td>
         </tr>`;
 }
 
@@ -14,7 +14,7 @@ function dispalyTeams(teams) {
   //transforma in HTML
 
   const teamsHTML = teams.map(getTeamHTML);
-  // console.info("teamsHTML", teamsHTML);
+  //  console.info("teamsHTML", teamsHTML);
 
   //Afiseaza
   $("table tbody").innerHTML = teamsHTML.join("");
@@ -24,17 +24,25 @@ function $(selector) {
 }
 
 function loadTeams() {
-  fetch("data/teams.json")
-    .then(function (r) {
-      // console.info(r);
-      return r.json();
-      r.json.apply();
-    })
+  fetch("http://localhost:3000/teams-json")
+    .then((r) => r.json())
     .then(function (teams) {
       dispalyTeams(teams);
     });
 }
+
+function createTeamRequest(team) {
+  return fetch("http://localhost:3000/teams-json/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(team),
+  });
+}
+
 function submitForm(e) {
+  e.preventDefault();
   const promotion = $("[name=promotion]").value;
   const members = $("[name=members]").value;
   const name = $("[name=name]").value;
@@ -46,9 +54,14 @@ function submitForm(e) {
     url: url,
   };
 
-  console.warn("submit", JSON.stringify(team));
-
-  e.preventDefault();
+  createTeamRequest(team)
+    .then((r) => r.json())
+    .then((status) => {
+      console.log("status", status);
+    });
+  if (status.success) {
+    location.reload();
+  }
 }
 function initEvents() {
   const form = document.getElementById("editForm");
