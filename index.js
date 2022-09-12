@@ -4,9 +4,12 @@ function getTeamHTML(team) {
           <td>${team.members}</td>
           <td>${team.name}</td>
           <td>
-            <a href="${team.url}">open</a>
+            <a href="${team.url}" target = '_blank'>open</a>
           </td>
-          <td><button type="button" id = 'delete'> ❌</button></td>
+          <td>
+          <a href = '#' data-id='${team.id}' class = 'delete-btn'>❌</a>
+          <a href= '#'>🖋️</a>
+          </td>
         </tr>`;
 }
 
@@ -65,8 +68,14 @@ function submitForm(e) {
 }
 function initEvents() {
   const form = document.getElementById("editForm");
-  console.info("form", form);
   form.addEventListener("submit", submitForm);
+
+  form.querySelector("tbody").addEventListener("click", (e) => {
+    if (e.target.matches("a.delete-btn")) {
+      var id = e.target.getAttribute("data-id");
+      console.info("click pe link", id);
+    }
+  });
 }
 
 loadTeams();
