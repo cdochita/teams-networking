@@ -1,3 +1,6 @@
+let allTeams = [];
+let editId;
+
 function getTeamHTML(team) {
   return `<tr>
           <td>${team.promotion}</td>
@@ -8,7 +11,7 @@ function getTeamHTML(team) {
           </td>
           <td>
           <a href = '#' data-id='${team.id}' class = 'delete-btn'>❌</a>
-          <a href= '#'>🖋️</a>
+          <a href= '#' data-id='${team.id}' class = 'edit-btn'>🖋️</a>
           </td>
         </tr>`;
 }
@@ -30,6 +33,7 @@ function loadTeams() {
   fetch("http://localhost:3000/teams-json")
     .then((r) => r.json())
     .then(function (teams) {
+      allTeams = teams;
       dispalyTeams(teams);
     });
 }
@@ -54,8 +58,7 @@ function removeTeamRequest(id) {
   }).then((r) => r.json());
 }
 
-function submitForm(e) {
-  e.preventDefault();
+function getFormValues() {
   const promotion = $("[name=promotion]").value;
   const members = $("[name=members]").value;
   const name = $("[name=name]").value;
@@ -66,15 +69,37 @@ function submitForm(e) {
     name: name,
     url: url,
   };
+  return team;
+}
 
-  createTeamRequest(team)
-    .then((r) => r.json())
-    .then((status) => {
-      console.log("status", status);
-    });
-  if (status.success) {
-    location.reload();
+function setFormValues(team) {
+  $("[name=promotion]").value = team.promotion;
+  $("[name=members]").value = team.members;
+  $("[name=name]").value = team.name;
+  $("[name=url]").value = team.url;
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const team = getFormValues();
+
+  if (editId) {
+    console.warn("please edit", team);
+  } else {
+    createTeamRequest(team)
+      .then((r) => r.json())
+      .then((status) => {
+        console.log("status", status);
+      });
+    if (status.success) {
+      location.reload();
+    }
   }
+}
+function startEditTeam(id) {
+  const team = allTeams.find((team) => team.id === id);
+  setFormValues(team);
+  editId = id;
 }
 function initEvents() {
   const form = document.getElementById("editForm");
@@ -89,6 +114,10 @@ function initEvents() {
           loadTeams();
         }
       });
+    } else if (e.target.matches("a.edit-btn")) {
+      var id = e.target.getAttribute("data-id");
+      startEditTeam(id);
+      console.warn(e.target.parentNode);
     }
   });
 }
