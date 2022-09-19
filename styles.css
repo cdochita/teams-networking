@@ -10,3 +10,9 @@
 #tfoot {
   text-align: center;
 }
+#editForm tfoot input[type="text"] {
+  width: 100%;
+}
+input:not([type="image" i]) {
+  box-sizing: border-box;
+}
