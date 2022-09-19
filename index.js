@@ -45,7 +45,7 @@ function createTeamRequest(team) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(team),
-  });
+  }).then((r) => r.json());
 }
 
 function removeTeamRequest(id) {
@@ -78,22 +78,32 @@ function setFormValues(team) {
   $("[name=name]").value = team.name;
   $("[name=url]").value = team.url;
 }
-
+function updateTeamRequest(team) {
+  return fetch("http://localhost:3000/teams-json/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(team),
+  }).then((r) => r.json());
+}
 function submitForm(e) {
   e.preventDefault();
   const team = getFormValues();
 
   if (editId) {
-    console.warn("please edit", team);
+    team.id = editId;
+    updateTeamRequest(team).then((status) => {
+      if (status.success) {
+        loadTeams();
+      }
+    });
   } else {
-    createTeamRequest(team)
-      .then((r) => r.json())
-      .then((status) => {
-        console.log("status", status);
-      });
-    if (status.success) {
-      location.reload();
-    }
+    createTeamRequest(team).then((status) => {
+      if (status.success) {
+        loadTeams();
+      }
+    });
   }
 }
 function startEditTeam(id) {
@@ -102,9 +112,12 @@ function startEditTeam(id) {
   editId = id;
 }
 function initEvents() {
-  const form = document.getElementById("editForm");
+  const form = $("#editForm");
   form.addEventListener("submit", submitForm);
-
+  form.addEventListener("reset", () => {
+    console.info("reset");
+    editId = undefined;
+  });
   form.querySelector("tbody").addEventListener("click", (e) => {
     if (e.target.matches("a.delete-btn")) {
       var id = e.target.getAttribute("data-id");
@@ -117,8 +130,10 @@ function initEvents() {
     } else if (e.target.matches("a.edit-btn")) {
       var id = e.target.getAttribute("data-id");
       startEditTeam(id);
-      console.warn(e.target.parentNode);
+
+      // console.warn(e.target.parentNode);
     }
+    location.reload;
   });
 }
 
