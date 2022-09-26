@@ -97,11 +97,13 @@ function submitForm(e) {
       if (status.success) {
         loadTeams();
       }
+      $("#editForm").reset();
     });
   } else {
     createTeamRequest(team).then((status) => {
       if (status.success) {
         loadTeams();
+        $("#editForm").reset();
       }
     });
   }
@@ -112,6 +114,14 @@ function startEditTeam(id) {
   editId = id;
 }
 function initEvents() {
+  $("#search").addEventListener("input", (e) => {
+    const search = e.target.value.toLowerCase();
+    const teams = allTeams.filter((team) => {
+      return team.promotion.toLowerCase().includes(search);
+    });
+    dispalyTeams(teams);
+  });
+
   const form = $("#editForm");
   form.addEventListener("submit", submitForm);
   form.addEventListener("reset", () => {
