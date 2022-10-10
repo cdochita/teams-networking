@@ -1,0 +1,18 @@
+#list {
+  border: 3rem;
+  width: 100%;
+  margin-top: 5rem;
+}
+
+#t-header {
+  border-color: red;
+}
+#tfoot {
+  text-align: center;
+}
+#editForm tfoot input[type="text"] {
+  width: 100%;
+}
+input:not([type="image" i]) {
+  box-sizing: border-box;
+}
